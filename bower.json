@@ -1,0 +1,31 @@
+{
+  "name": "batchupload",
+  "description": "A HTML5 Chunked File Upload API (fault-tolerant) with Drag and Drop Components",
+  "main": "dist/batchupload.min.js",
+  "authors": [
+    "Alex Boyce <curiosity26@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "html5",
+    "Chunked",
+    "File",
+    "Batch",
+    "Drag",
+    "Drop",
+    "File API"
+  ],
+  "moduleType": [
+    "es6",
+    "globals",
+    "node"
+  ],
+  "homepage": "https://github.com/curiosity26/batchupload",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "batchupload",
+  "version": "0.0.1",
+  "description": "A HTML5 Chunked File Upload API (fault-tolerant) with Drag and Drop Components",
+  "main": "dist/batchupload.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "curiosity26/batchupload#0.0.1",
+  "keywords": [
+    "file",
+    "upload",
+    "chunked",
+    "batch",
+    "drag",
+    "drop",
+    "ui"
+  ],
+  "author": "Alex Boyce <curiosity26@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+      "gulp" : "*",
+      "gulp-uglify" : "*",
+      "gulp-rename" : "*",
+      "gulp-replace": "*"
+  }
+}
