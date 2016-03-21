@@ -60,7 +60,7 @@ FileUploadManager also handles some basic file validation before queuing the fil
 ### Settings
 
 | Settings | Default | Description |
---
+| --- | --- | --- |
 | maxQueue | 6 | The maximum number of files to be simultaneously uploaded for this instantiation. |
 | url | null | The URL of the backend script that will handle the file upload, e.g. `upload.php`. |
 | method | POST | The HTTP method used to send the data. PUT is also acceptable, but symantically POST is most correct. |
@@ -78,7 +78,8 @@ FileUploadManager also handles some basic file validation before queuing the fil
 ### Methods
 
 | Method | Description |
---
+| --- | --- |
+| new FileUploadManager(Object *settings*) | Constructor |
 | addFile(File *file*) | Adds a File object to the queue for uploading. If the queue isn't paused, queue autostarting is permitted, and the queue length is less than the configured `maxQueue` setting, the upload will automatically start. If the file is successfully loaded into the queue, given it passes validation checks, a `queue` event will be issued on the instantiated `FileUploadManager` object for which the File is queued. |
 | setFiles(FileList|Array[File] *files*) | Sets the list of files to upload to the queue with similar behavior to that of `addFile()` but is destructive. If any files are in the queue, they will be trashed. |
 | start() | Starts uploading the queue of files. This has no affect if the queue is already started. A `start` event is triggered. |
@@ -99,7 +100,7 @@ FileUploadManager also handles some basic file validation before queuing the fil
 ### Events
 
 | Event Name | Description |
---
+| --- | --- |
 | start | Dispatches when the `start()` method is successfully called. |
 | pause | Dispatched when the `pause()` method is successfully called. |
 | queue | Dispatched when a file is successfully add to the upload queue. |
@@ -116,7 +117,7 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 ### Properties
 
 | Property Name | Description |
---
+| --- | --- |
 | bytesLoaded&dagger; | The bytes uploaded to the server for a the [FileUpload](#fileupload) object which triggered the event on the `FileUploadManager`. |
 | bytesTotal&dagger; | The total file size in bytes for the [FileUpload](#fileupload) object which triggered the event on the `FileUploadManager`. |
 | totalBytesLoaded | The total number of bytes that have been uploaded for the `FileUploadManager`s queue. |
@@ -136,7 +137,7 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 ### Settings
 
 | Settings | Default | Description |
---
+| --- | --- | --- |
 | filename | null | The filename the backend should use. If null, the filename from the File object is used. |
 | url | null | The URL of the backend script that will handle the file upload, e.g. `upload.php` |
 | method | POST | The HTTP method used to send the data. PUT is also acceptable, but symantically POST is most correct |
@@ -149,7 +150,7 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 ### Methods
 
 | Method | Description |
---
+| --- | --- |
 | new FileUpload(Blob *file*, Object *settings*) | Constructor |
 | start() | Starts the upload process. Dispatches the 'start' event. |
 | pause() | Pauses the upload process. Dispatches the 'pause' event. |
@@ -162,6 +163,8 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 
 ### Events
 
+| Event Name | Description |
+| --- | --- |
 | start | Dispatches when the `start()` method is successfully called. |
 | pause | Dispatched when the `pause()` method is successfully called. |
 | progress | Dispatched when upload progress updated. |
@@ -171,7 +174,7 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 ## FileUploadEvent
 
 | Property Name | Description |
---
+| --- | --- |
 | bytesLoaded | Number of bytes sent to the server. |
 | bytesTotal | Total number of bytes to be uploaded. |
 | filename | The filename used by the server. |
