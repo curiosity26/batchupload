@@ -148,9 +148,15 @@ var FileManagerEvent = function(type, eventInit) {
 FileManagerEvent.DEFAULT = {
     bytesLoaded: 0,
     bytesTotal: 0,
-    queue: {},
+    totalBytesLoaded: 0,
+    totalBytesTotal: 0,
+    currentTarget: null,
+    file: null,
+    queue: [],
+    errors: [],
     fileList: [],
-    completed: {}
+    completed: [],
+    data: null
 };
 
 FileManagerEvent.constructor = CustomEvent;
@@ -272,9 +278,18 @@ FileDropZone.prototype.setElement = function(el) {
  * @param settings
  * @constructor
  */
-var FileUploadManager = function(files, settings) {
+var FileUploadManager = function(settings) {
     this.events = [];
     this.setSettings(settings);
+    this.bytesLoaded = 0;
+    this.bytesTotal = 0;
+    this.paused = !this.settings.autoStart;
+
+    var _self = this;
+    var _fileList = [];
+    var _completed = new List('item.uuid');
+    var _errors = new List('item.uuid');
+    var _queue = new List('item.uuid');
 
     var onStart = function(event) {
         var e = new FileManagerEvent('file_start', {
@@ -311,6 +326,8 @@ var FileUploadManager = function(files, settings) {
     };
 
     var onProgress = function(event) {
+        _self.bytesLoaded += event.bytesLoaded;
+
         var e = new FileManagerEvent('file_progress', {
             bytesLoaded: event.bytesLoaded,
             bytesTotal: event.bytesTotal,
@@ -372,12 +389,6 @@ var FileUploadManager = function(files, settings) {
         queue.apply(_self);
     };
 
-    var _self = this;
-    var _fileList = [];
-    var _completed = new List('item.uuid');
-    var _errors = new List('item.uuid');
-    var _queue = new List('item.uuid');
-
     _queue.add = function(item) {
         if (!!item.uuid) {
             item.addEventListener('start', onStart);
@@ -403,13 +414,12 @@ var FileUploadManager = function(files, settings) {
         }
     };
 
-
-    this.bytesLoaded = 0;
-    this.bytesTotal = 0;
-    this.paused = !this.settings.autoStart;
-
     this.addFile = function(file) {
         if (!file instanceof File || !this.validate(file)) {
+            // If it's an actual file, just throw it in the error queue
+            if (file instanceof File) {
+                _errors.add(file);
+            }
             return;
         }
 
@@ -459,11 +469,19 @@ var FileUploadManager = function(files, settings) {
         while(_queue.length < _self.settings.maxQueue && _fileList.length > 0) {
             var file = _fileList.shift();
             if (!!file) {
+                // Create the FileUpload to queue
                 var fu = new FileUpload(file, {
                     url: _self.settings.url,
                     method: _self.settings.method,
-                    autoStart: false
+                    autoStart: false,
+                    maxChunkSize: _self.settings.maxChunkSize,
+                    formFileField: _self.settings.formFileField,
+                    chunkParameter: _self.settings.chunkParameter,
+                    chunksParameter: _self.settings.chunksParameter
                 });
+
+                // Update the total queue size
+                _self.bytesTotal += file.size;
 
                 // Add the uploader to the queue
                 _queue.add(fu);
@@ -539,9 +557,6 @@ var FileUploadManager = function(files, settings) {
       _completed.clear();
       return this;
     }
-
-    // Set fileList
-    this.setFiles(files);
 };
 
 FileUploadManager.DEFAULT = {
@@ -551,7 +566,11 @@ FileUploadManager.DEFAULT = {
     autoStart: true,
     allowedTypes: [],
     allowedExtensions: [],
-    maxFileSize: null
+    maxFileSize: null,
+    maxChunkSize: 1048576,
+    formFileField: 'file',
+    chunkParameter: 'chunk',
+    chunksParameter: 'chunks'
 };
 
 FileUploadManager.prototype = new EventEmitter();
@@ -633,7 +652,7 @@ var FileUpload = function(file, settings) {
 
     var _self = this;
 
-    const BYTE_SIZE = 1024 * 1024;
+    var BYTE_SIZE = this.settings.maxChunkSize;
 
     this.setSettings(settings);
     this.paused = !this.settings.autoStart;
@@ -736,8 +755,8 @@ var FileUpload = function(file, settings) {
 
                 var fd = new FormData();
                 fd.append('filename', _self.settings.filename);
-                fd.append('chunk', _self.chunk);
-                fd.append('chunks', _self.chunks);
+                fd.append(_self.settings.chunkParameter, _self.chunk);
+                fd.append(_self.settings.chunksParameter, _self.chunks);
                 fd.append(_self.settings.formFileField, _self.file.slice(_self.bytesLoaded, _self.bytesLoaded + BYTE_SIZE), _self.settings.filename);
 
                 xhr.send(fd);
@@ -763,6 +782,8 @@ var FileUpload = function(file, settings) {
         }));
         
         upload.apply(this);
+
+        return this;
     };
 
     this.pause = function() {
@@ -775,7 +796,23 @@ var FileUpload = function(file, settings) {
             filename: this.settings.filename,
             file: this.file
         }));
+
+        return this;
     };
+
+    this.reset = function() {
+        var paused = this.paused;
+        this.pause();
+        this.chunk = 0;
+        this.bytesLoaded = 0;
+        this.startTime = new Date().getTime();
+
+        if (!paused) {
+            this.start();
+        }
+
+        return this;
+    }
 
     this.uuid = uuid();
 
@@ -789,7 +826,10 @@ FileUpload.DEFAULT = {
     method: 'POST',
     url: null,
     autoStart: true,
-    formFileField: 'file'
+    formFileField: 'file',
+    chunkParameter: 'chunk',
+    chunksParameter: 'chunks',
+    maxChunkSize: 1048576
 };
 
 FileUpload.prototype = new EventEmitter();
