@@ -157,7 +157,7 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 | reset() | Resets the upload process. Calls `pause()` and `start()` (if previously unpaused). |
 | setSettings(Object *settings*) | Sets the settings object. |
 | setUrl(String *url*) | Sets the URL to upload the file to. **Do not change mid-upload. This will corrupt the upload.** |
-| addEventListener(event, callback) | Add a callback function to a `FileUpload` object to be trigger for a specific event. The callback function will receive a `FileUploadEvent` object as its only parameter. See Events below. |
+| addEventListener(event, callback) | Add a callback function to a `FileUpload` object to be trigger for a specific event. The callback function will receive a [FileUploadEvent](#fileuploadevent) object as its only parameter. See Events below. |
 | removeEventListener(event, callback) | Removes a callback function from a specific event. See Events below. | removeAllListeners() | Removes all event callbacks from the `FileUpload` object. |
 | dispatchEvent(event) | Triggers all listener callbacks for the given event. See Events below. |
 
@@ -185,6 +185,28 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 
 ## FileDropZone
 
-## List
+### Settings
+
+| Settings | Default | Description |
+| --- | --- | --- |
+| manager | null | The [FileUploadManager](#fileuploadmanager) object to use. If null, a new `FileUploadManager` will be instatiated using settings from the `FileDropZone`. |
+| dragOverClass | drag-over | The class to be added to the DOM element when files are dragged over the element. |
+| maxQueue<sup>$degree;</sup> | 6 | The maximum number of files to be simultaneously uploaded for this instantiation. |
+| url<sup>$degree;</sup> | null | The URL of the backend script that will handle the file upload, e.g. `upload.php`. |
+| method<sup>$degree;</sup> | POST | The HTTP method used to send the data. PUT is also acceptable, but symantically POST is most correct. |
+| autoStart<sup>$degree;</sup> | true | Automatically start the upload queue when files are provided. If false, the `start()` method will need to be called to start uploads. |
+| allowedTypes<sup>$degree;</sup> | [] | A list of permitted file MIME types. Defaulty, all file types are permitted to be uploaded. Any mime types not in the list will not be queued. e.g., image/png |
+| allowedExtensions<sup>$degree;</sup> | [] | A list of permitted file extensions. Defaultly, all extensions are permitted. |
+| maxFileSize<sup>$degree;</sup> | null | The maximum size of a file for upload (in bytes). Files larger than this size are rejected. Defaultly, there is no restriction on file size. |
+| maxChunkSize<sup>$degree;</sup> | 1048576 | The maximum size (in bytes) of the chunk sent to the server. Default is 1MB. |
+| formFileField<sup>$degree;</sup> | file | The name of the parameter the backend uses to capture the file data. |
+| chunkParameter<sup>$degree;</sup> | chunk | The name of the parameter the backend uses to determine which chunk is being uploaded. |
+| chunksParameter<sup>$degree;</sup> | chunks | The name of the parameter the backend uses to determine how many chunks to expect. |
+
+* <sup>$degree;</sup> Not used when the `manager` setting is supplied. *
+
+## Utilities
+
+### List
 
 

@@ -222,7 +222,7 @@ var EventEmitter = function() {
  */
 var FileDropZone = function(el, settings) {
     this.setSettings(settings);
-    this.manager = this.settings.manager || new FileUploadManager([], this.settings);
+    this.manager = this.settings.manager || new FileUploadManager(this.settings);
     this.setElement(el);
 };
 
@@ -231,9 +231,15 @@ FileDropZone.DEFAULT = {
     method: 'POST',
     manager: null,
     dragOverClass: 'drag-over',
+    maxQueue: 6,
+    autoStart: true,
     allowedTypes: [],
     allowedExtensions: [],
-    maxFileSize: null
+    maxFileSize: null,
+    maxChunkSize: 1048576,
+    formFileField: 'file',
+    chunkParameter: 'chunk',
+    chunksParameter: 'chunks'
 };
 
 FileDropZone.prototype.setSettings = function(settings) {
