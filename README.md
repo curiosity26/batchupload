@@ -196,7 +196,7 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 | method<sup>&deg;</sup> | POST | The HTTP method used to send the data. PUT is also acceptable, but symantically POST is most correct. |
 | autoStart<sup>&deg;</sup> | true | Automatically start the upload queue when files are provided. If false, the `start()` method will need to be called to start uploads. |
 | allowedTypes<sup>&deg;</sup> | [] | A list of permitted file MIME types. Defaulty, all file types are permitted to be uploaded. Any mime types not in the list will not be queued. e.g., image/png |
-| allowedExtensions<sup>$degree;</sup> | [] | A list of permitted file extensions. Defaultly, all extensions are permitted. |
+| allowedExtensions<sup>&deg;</sup> | [] | A list of permitted file extensions. Defaultly, all extensions are permitted. |
 | maxFileSize<sup>&deg;</sup> | null | The maximum size of a file for upload (in bytes). Files larger than this size are rejected. Defaultly, there is no restriction on file size. |
 | maxChunkSize<sup>&deg;</sup> | 1048576 | The maximum size (in bytes) of the chunk sent to the server. Default is 1MB. |
 | formFileField<sup>&deg;</sup> | file | The name of the parameter the backend uses to capture the file data. |
