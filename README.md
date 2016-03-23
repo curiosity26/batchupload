@@ -205,8 +205,37 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 
 <em> <sup>&deg;</sup> Not used when the `manager` setting is supplied. </em>
 
+### Methods
+
+| Method | Description |
+| --- | --- |
+| new FileDropZone(Element *element*, Object *settings*) | Constructor. Accepts a DOM Element and settings object as parameters. Constructor parameters are not required. |
+| setElement(Element *element*) | Binds a DOM Element with the `FileDropZone` object. |
+| setSettings(Object *settings*) | A settings object with properties as defined above. |
+
 ## Utilities
 
 ### List
 
+#### Properties
 
+| Property | Default | Description |
+| --- | --- | --- |
+| key | this.length | A string `eval()`'d to determine the item's key value when added to the list. Use `item` to reference the item when adding. |
+| length | 0 | The number of items in the list. |
+| list | {} | The object representing the list. Each item in the list is a value in this object with a key value as the item's property name. |
+
+#### Methods
+
+| Method | Description |
+| --- | --- |
+| new List() | Constructor for empty list with default settings. |
+| new List(String *key*, Array *items*) | Constructor specifying the key eval and a set of items to populate. |
+| new List(String *key*) | Constructor for empty list with custom key eval. |
+| new List(Array *items*) | Constructor with default key eval and pre-populated set of items. |
+| get(*key*) | Get an item from the list using a key value. |
+| add(*item*) | Add an item to the list. The item's associated key will be set dynamically by `eval()`'ing the `List.key` property. |
+| remove(*item*) | Removes an item from a list. Performs binary assertion. |
+| item(*index*) | Get an item at an indexed value (starting at 0) instead of a key. |
+| clear() | Clear and reset the list. |
+| toArray() | Get list items as an array. Key values are not passed to the array, only the items in the list. |

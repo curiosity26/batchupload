@@ -64,20 +64,30 @@ var List = function() {
             var key = eval(this.key);
             this.list[key] = item;
             ++this.length;
+
+            return this;
         },
         remove: function (item) {
-            var key = eval(this.key);
-            delete this.list[key];
-            --this.length;
+            for (var key in this.list) {
+                if (this.list.hasOwnProperty(key) && this.list[key] === item) {
+                    delete this.list[key];
+                    var tmp = new List(this.key, this.toArray());
+                    this.list = tmp.list;
+                    this.length = tmp.length;
+                    break;
+                }
+            }
+            return this;
         },
-        item: function(item) {
-          var keys = Object.keys(this.list);
-          var key = keys[item];
-          return this.list[key];
+        item: function(index) {
+            var keys = Object.keys(this.list);
+            var key = keys[index];
+            return this.list[key];
         },
         clear: function() {
-          this.list = {};
-          this.length = 0;
+            this.list = {};
+            this.length = 0;
+            return this;
         },
         toArray: function () {
           var f = function() {

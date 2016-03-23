@@ -13,7 +13,8 @@
     "Batch",
     "Drag",
     "Drop",
-    "File API"
+    "File",
+    "API"
   ],
   "moduleType": [
     "es6",
