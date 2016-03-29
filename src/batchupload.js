@@ -668,9 +668,8 @@ var FileUpload = function(file, settings) {
 
     var _self = this;
 
-    var BYTE_SIZE = this.settings.maxChunkSize;
-
     this.setSettings(settings);
+    var BYTE_SIZE = this.settings.maxChunkSize;
     this.paused = !this.settings.autoStart;
     this.bytesLoaded = 0;
     this.bytesTotal = file.size;
