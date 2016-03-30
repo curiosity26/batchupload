@@ -529,8 +529,8 @@ var FileUploadManager = function(settings) {
 
         queue.apply(this);
         
-        for (var n in _queue) {
-            _queue[n].start();
+        for (var n in _queue.list) {
+            _queue.item(n).start();
         }
 
         this.dispatchEvent(FileManagerEvent('start', {
