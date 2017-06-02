@@ -1,7 +1,7 @@
 /*
     Batch Upload
     ------------
-    Author: Alex Boyce (curiosit26@gmail.com)
+    Author: Alex Boyce (curiosity26@gmail.com)
 */
 
 var extend = function () {
@@ -290,7 +290,6 @@ FileDropZone.prototype.setElement = function(el) {
 
 /**
  * FileManager
- * @param files
  * @param settings
  * @constructor
  */
@@ -344,7 +343,23 @@ var FileUploadManager = function(settings) {
     var onProgress = function(event) {
         _self.bytesLoaded += event.bytesLoaded;
 
+        // @deprecated
         var e = new FileManagerEvent('file_progress', {
+            bytesLoaded: event.bytesLoaded,
+            bytesTotal: event.bytesTotal,
+            totalBytesLoaded: _self.bytesLoaded,
+            totalBytesTotal: _self.bytesTotal,
+            currentTarget: event.target,
+            file: event.file,
+            queue: _queue.toArray(),
+            errors: _errors.toArray(),
+            fileList: _fileList,
+            completed: _completed.toArray()
+        });
+
+        _self.dispatchEvent(e);
+
+        e = new FileManagerEvent('progress', {
             bytesLoaded: event.bytesLoaded,
             bytesTotal: event.bytesTotal,
             totalBytesLoaded: _self.bytesLoaded,
@@ -364,7 +379,23 @@ var FileUploadManager = function(settings) {
         _queue.remove(event.target);
         _errors.add(event.target);
 
+        // @deprecated
         var e = new FileManagerEvent('file_error', {
+            bytesLoaded: 0,
+            bytesTotal: event.bytesTotal,
+            totalBytesLoaded: _self.bytesLoaded,
+            totalBytesTotal: _self.bytesTotal,
+            currentTarget: event.target,
+            file: event.file,
+            queue: _queue.toArray(),
+            errors: _errors.toArray(),
+            fileList: _fileList,
+            completed: _completed.toArray()
+        });
+
+        _self.dispatchEvent(e);
+
+        e = new FileManagerEvent('error', {
             bytesLoaded: 0,
             bytesTotal: event.bytesTotal,
             totalBytesLoaded: _self.bytesLoaded,
@@ -386,7 +417,24 @@ var FileUploadManager = function(settings) {
         _completed.add(event.target);
         _queue.remove(event.target);
 
+        // @deprecated
         var e = new FileManagerEvent('file_complete', {
+            bytesLoaded: event.bytesLoaded,
+            bytesTotal: event.bytesTotal,
+            totalBytesLoaded: _self.bytesLoaded,
+            totalBytesTotal: _self.bytesTotal,
+            currentTarget: event.target,
+            file: event.file,
+            queue: _queue.toArray(),
+            errors: _errors.toArray(),
+            fileList: _fileList,
+            completed: _completed.toArray(),
+            data: event.data
+        });
+
+        _self.dispatchEvent(e);
+
+        e = new FileManagerEvent('complete', {
             bytesLoaded: event.bytesLoaded,
             bytesTotal: event.bytesTotal,
             totalBytesLoaded: _self.bytesLoaded,
@@ -435,6 +483,20 @@ var FileUploadManager = function(settings) {
             // If it's an actual file, just throw it in the error queue
             if (file instanceof File) {
                 _errors.add(file);
+                var e = new FileManagerEvent('invalid', {
+                    bytesLoaded: 0,
+                    bytesTotal: file.size,
+                    totalBytesLoaded: _self.bytesLoaded,
+                    totalBytesTotal: _self.bytesTotal,
+                    currentTarget: this,
+                    queue: _queue.toArray(),
+                    file: file,
+                    fileList: _fileList,
+                    completed: _completed.toArray(),
+                    errors: _errors.toArray()
+                });
+
+                this.dispatchEvent(e);
             }
             return;
         }
@@ -473,7 +535,7 @@ var FileUploadManager = function(settings) {
             }
         }
 
-        if (this.settings.autoStart == true) {
+        if (this.settings.autoStart === true) {
             this.start();
         }
 

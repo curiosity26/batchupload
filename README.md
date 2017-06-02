@@ -104,10 +104,14 @@ FileUploadManager also handles some basic file validation before queuing the fil
 | start | Dispatches when the `start()` method is successfully called. |
 | pause | Dispatched when the `pause()` method is successfully called. |
 | queue | Dispatched when a file is successfully add to the upload queue. |
+| invalid | Dispatched when a file has not met the validation requirements. |
+| complete | Dispatched when a [FileUpload](#fileupload) object has successfully uploaded all its chunks. |
+| progress | Dispatched when upload information on a [FileUpload](#fileupload) object is updated. |
+| error | Dispatched when a [FileUpload](#fileupload) object fails to upload a chunk. |
 | file_start | Dispatched when a [FileUpload](#fileupload) object in the queue begins its upload process. |
-| file_progress | Dispatched when upload information on a [FileUpload](#fileupload) object is updated. |
-| file_complete | Dispatched when a [FileUpload](#fileupload) object has successfully uploaded all its chunks. |
-| file_error | Dispatched when a [FileUpload](#fileupload) object fails to upload a chunk. |
+| file_progress | **Deprecated.** *See `progress`* |
+| file_complete | **Deprecated.** *See `complete`* |
+| file_error | **Deprecated.** *See `error`* |
 
 
 ## FileManagerEvent
