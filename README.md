@@ -1,5 +1,5 @@
 # Batch Upload
-An Event-based JavaScript batched upload library written in native JavaScript to be usable with any other framework or library. 
+A multi-threaded, event-based JavaScript batched upload library written in native JavaScript to be usable with any other framework or library. 
 
 *Also includes the FileDropUpload class to connect HTML5 File Drag and Drop to a UI component*
 
@@ -73,7 +73,7 @@ FileUploadManager also handles some basic file validation before queuing the fil
 | chunkParameter | chunk | The name of the parameter the backend uses to determine which chunk is being uploaded. |
 | chunksParameter | chunks | The name of the parameter the backend uses to determine how many chunks to expect. |
 
-* Note: File validation priority goes size, mime type, extension. If 'image/jpeg' is the `allowedTypes` list and the `allowedExtentions` list has values but '.jpg' is not in the list, the file will be rejected. If 'image/jpeg' is in the `allowedTypes` list and the `allowedExtensions` is empty, then the file will be accepted. And vice-versa.  *
+* Note: File validation priority goes size, mime type, extension. If 'image/jpeg' is the `allowedTypes` list and the `allowedExtentions` list has values but 'jpg' is not in the list, the file will be rejected. If 'image/jpeg' is in the `allowedTypes` list and the `allowedExtensions` is empty, then the file will be accepted. And vice-versa.  *
 
 ### Methods
 
@@ -92,8 +92,10 @@ FileUploadManager also handles some basic file validation before queuing the fil
 | validateSize(File *file*) | Validates a File's file size if the `maxFileSize` setting is configured. |
 | validate(File *file*) | Runs the three previous validation functions on the provided File. |
 | setSettings(Object settings) | Sets the settings object for an instance of a `FileUploadManager`. | 
-| addEventListener(event, callback) | Add a callback function to a `FileUploadManager` object to be trigger for a specific event. The callback function will receive a `FileManagerEvent` object as its only parameter. See Events below. |
-| removeEventListener(event, callback) | Removes a callback function from a specific event. See Events below. | removeAllListeners() | Removes all event callbacks from the `FileUploadManager` object. |
+| on(event, callback) | Add a callback function to a `FileUploadManager` object to be trigger for a specific event. The callback function will receive a `FileManagerEvent` object as its only parameter. See Events below. |
+| off(event, callback) | Removes a callback function from a specific event. See Events below. | removeAllListeners() | Removes all event callbacks from the `FileUploadManager` object. |
+| addEventListener(event, callback) | *See `on()`* |
+| removeEventListener(event, callback) | *See `off()`* |
 | dispatchEvent(event) | Triggers all listener callbacks for the given event. See Events below. |
 
 
@@ -163,6 +165,8 @@ An object with information about a [FileUploadManager](#fileuploadmanagers)s sta
 | setUrl(String *url*) | Sets the URL to upload the file to. **Do not change mid-upload. This will corrupt the upload.** |
 | addEventListener(event, callback) | Add a callback function to a `FileUpload` object to be trigger for a specific event. The callback function will receive a [FileUploadEvent](#fileuploadevent) object as its only parameter. See Events below. |
 | removeEventListener(event, callback) | Removes a callback function from a specific event. See Events below. | removeAllListeners() | Removes all event callbacks from the `FileUpload` object. |
+| on(event, callback) | *See `on()`* |
+| off(event, callback) | *See `off()`* |
 | dispatchEvent(event) | Triggers all listener callbacks for the given event. See Events below. |
 
 ### Events

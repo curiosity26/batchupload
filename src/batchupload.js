@@ -177,7 +177,7 @@ FileManagerEvent.constructor = CustomEvent;
  */
 var EventEmitter = function() {
 
-    this.addEventListener = function(type, listener) {
+    this.on = this.addEventListener = function(type, listener) {
         if (!this.events[type]) {
             this.events[type] = [];
         }
@@ -185,7 +185,7 @@ var EventEmitter = function() {
         this.events[type].push(listener);
     };
 
-    this.removeEventListener = function (type, listener) {
+    this.off = this.removeEventListener = function (type, listener) {
         if (!!this.events[type]) {
             for(var i = 0; i < this.events[type].length; i++) {
                 if (this.events[type][i] === listener) {
@@ -455,11 +455,11 @@ var FileUploadManager = function(settings) {
 
     _queue.add = function(item) {
         if (!!item.uuid) {
-            item.addEventListener('start', onStart);
-            item.addEventListener('pause', onPause);
-            item.addEventListener('progress', onProgress);
-            item.addEventListener('error', onError);
-            item.addEventListener('complete', onComplete);
+            item.on('start', onStart);
+            item.on('pause', onPause);
+            item.on('progress', onProgress);
+            item.on('error', onError);
+            item.on('complete', onComplete);
 
             this.list[item.uuid] = item;
             ++this.length;
@@ -467,11 +467,11 @@ var FileUploadManager = function(settings) {
     };
     _queue.remove = function(item) {
         if (!!item.uuid) {
-            item.removeEventListener('start', onStart);
-            item.removeEventListener('pause', onPause);
-            item.removeEventListener('progress', onProgress);
-            item.removeEventListener('error', onError);
-            item.removeEventListener('complete', onComplete);
+            item.off('start', onStart);
+            item.off('pause', onPause);
+            item.off('progress', onProgress);
+            item.off('error', onError);
+            item.off('complete', onComplete);
 
             delete this.list[item.uuid];
             --this.length;
