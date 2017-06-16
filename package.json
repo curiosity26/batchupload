@@ -1,12 +1,12 @@
 {
   "name": "batchupload",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "description": "A HTML5 Chunked File Upload API (fault-tolerant) with Drag and Drop Components",
   "main": "dist/batchupload.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "curiosity26/batchupload#0.0.1",
+  "repository": "curiosity26/batchupload#1.0.2",
   "keywords": [
     "file",
     "upload",
