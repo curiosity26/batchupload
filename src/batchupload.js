@@ -919,3 +919,10 @@ FileUpload.prototype.setSettings = function(settings) {
 FileUpload.prototype.setUrl = function(url) {
     this.settings.url = url;
 };
+
+// Bind to Window
+
+window.FileUploadManager = FileUploadManager;
+window.FileUpload = FileUpload;
+window.FileUploadEvent = FileUploadEvent;
+window.FileDropZone = FileDropZone;
