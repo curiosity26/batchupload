@@ -1,6 +1,6 @@
 {
   "name": "batchupload",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A HTML5 Chunked File Upload API (fault-tolerant) with Drag and Drop Components",
   "main": "dist/batchupload.min.js",
   "scripts": {
