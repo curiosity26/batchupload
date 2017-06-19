@@ -32,25 +32,15 @@ var uuid = function (){
     });
 };
 
-if (!window.CustomEvent) {
-    /**
-     * CustomEvent (polyfill)
-     * @param event
-     * @param params
-     * @returns {Event}
-     * @constructor
-     */
-    var CustomEvent = function ( event, params ) {
-        params = params || { bubbles: false, cancelable: false, detail: undefined };
-        var evt = document.createEvent( 'CustomEvent' );
-        evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-        return evt;
-    };
 
-    CustomEvent.prototype = window.Event.prototype;
+var EventBase = function (event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
+};
 
-    window.CustomEvent = CustomEvent;
-}
+EventBase.prototype = window.Event.prototype;
 
 var List = function() {
     var list = {
@@ -130,9 +120,9 @@ var List = function() {
  * @constructor
  */
 var FileUploadEvent = function(type, eventInit) {
-    var event = extend(FileUploadEvent.DEFAULT, new CustomEvent(type), eventInit);
+    var event = extend(FileUploadEvent.DEFAULT, new EventBase(type), eventInit);
 
-    event.prototype = CustomEvent.prototype;
+    event.prototype = EventBase.prototype;
     event.constructor = FileUploadEvent;
 
     return event;
@@ -144,13 +134,13 @@ FileUploadEvent.DEFAULT = {
     file: null
 };
 
-FileUploadEvent.constructor = CustomEvent;
+FileUploadEvent.constructor = EventBase;
 
 
 var FileManagerEvent = function(type, eventInit) {
-    var event = extend(FileManagerEvent.DEFAULT, new CustomEvent(type), eventInit);
+    var event = extend(FileManagerEvent.DEFAULT, new EventBase(type), eventInit);
 
-    event.prototype = CustomEvent.prototype;
+    event.prototype = EventBase.prototype;
     event.constructor = FileManagerEvent;
     return event;
 };
@@ -169,7 +159,7 @@ FileManagerEvent.DEFAULT = {
     data: null
 };
 
-FileManagerEvent.constructor = CustomEvent;
+FileManagerEvent.constructor = EventBase;
 
 /**
  * EventEmitter
