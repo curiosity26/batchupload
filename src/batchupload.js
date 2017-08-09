@@ -159,6 +159,10 @@ FileManagerEvent.DEFAULT = {
     data: null
 };
 
+FileManagerEvent.INVALID_SIZE = 1;
+FileManagerEvent.INVALID_TYPE = 2;
+FileManagerEvent.INVALID_EXT  = 4;
+
 FileManagerEvent.constructor = EventBase;
 
 /**
@@ -380,7 +384,8 @@ var FileUploadManager = function(settings) {
             queue: _queue.toArray(),
             errors: _errors.toArray(),
             fileList: _fileList,
-            completed: _completed.toArray()
+            completed: _completed.toArray(),
+            fileError: event
         });
 
         _self.dispatchEvent(e);
@@ -395,7 +400,8 @@ var FileUploadManager = function(settings) {
             queue: _queue.toArray(),
             errors: _errors.toArray(),
             fileList: _fileList,
-            completed: _completed.toArray()
+            completed: _completed.toArray(),
+            fileError: event
         });
 
         _self.dispatchEvent(e);
@@ -691,8 +697,19 @@ FileUploadManager.prototype.validateSize = function(file) {
 };
     
 FileUploadManager.prototype.validate = function(file) {
-  return this.validateSize(file) && this.validateTypes(file) && this.validateExts(file);
-}
+  if (!(size = this.validateSize(file)) || !(type = this.validateTypes(file)) || !(ext = this.validateExts(file))) {
+      var e = new FileManagerEvent('invalid', {
+          file: file,
+          reason: (size && FileManagerEvent.INVALID_SIZE)
+                    | (type && FileManagerEvent.INVALID_TYPE)
+                    | (ext && FileManagerEvent.INVALID_EXT)
+      });
+
+      this.dispatchEvent(e);
+  }
+
+  return false;
+};
 
 FileUploadManager.prototype.setSettings = function(settings) {
     this.settings = extend(FileUploadManager.DEFAULT, settings);
