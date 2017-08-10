@@ -695,20 +695,24 @@ FileUploadManager.prototype.validateSize = function(file) {
   }
   return file.size <= ms;
 };
-    
-FileUploadManager.prototype.validate = function(file) {
-  if (!(size = this.validateSize(file)) || !(type = this.validateTypes(file)) || !(ext = this.validateExts(file))) {
-      var e = new FileManagerEvent('invalid', {
-          file: file,
-          reason: (size && FileManagerEvent.INVALID_SIZE)
-                    | (type && FileManagerEvent.INVALID_TYPE)
-                    | (ext && FileManagerEvent.INVALID_EXT)
-      });
 
-      this.dispatchEvent(e);
-  }
+FileUploadManager.prototype.validate = function (file) {
+    var size = this.validateSize(file),
+        type = this.validateTypes(file),
+        ext = this.validateExts(file);
 
-  return false;
+    if (!size || !type || !ext) {
+        var e = new FileManagerEvent('invalid', {
+            file: file,
+            reason: (size && FileManagerEvent.INVALID_SIZE)
+            | (type && FileManagerEvent.INVALID_TYPE)
+            | (ext && FileManagerEvent.INVALID_EXT)
+        });
+
+        this.dispatchEvent(e);
+    }
+
+    return false;
 };
 
 FileUploadManager.prototype.setSettings = function(settings) {
