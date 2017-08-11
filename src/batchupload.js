@@ -699,20 +699,22 @@ FileUploadManager.prototype.validateSize = function(file) {
 FileUploadManager.prototype.validate = function (file) {
     var size = this.validateSize(file),
         type = this.validateTypes(file),
-        ext = this.validateExts(file);
+        ext  = this.validateExts(file);
 
     if (!size || !type || !ext) {
         var e = new FileManagerEvent('invalid', {
             file: file,
-            reason: (size && FileManagerEvent.INVALID_SIZE)
-            | (type && FileManagerEvent.INVALID_TYPE)
-            | (ext && FileManagerEvent.INVALID_EXT)
+            reason: (!size && FileManagerEvent.INVALID_SIZE)
+                | (!type && FileManagerEvent.INVALID_TYPE)
+                | (!ext && FileManagerEvent.INVALID_EXT)
         });
 
         this.dispatchEvent(e);
+
+        return false;
     }
 
-    return false;
+    return true;
 };
 
 FileUploadManager.prototype.setSettings = function(settings) {
