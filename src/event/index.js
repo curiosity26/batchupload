@@ -1,5 +1,4 @@
 /**
- * filemanagerevent.js
  * Author: Alex Boyce <curiosity26@gmail.com>
  * Date: 2017-08-03
  **/
@@ -32,7 +31,21 @@ class FileManagerEvent extends CustomEvent {
         this.fileList = eventInitDict.fileList || new FileMap();
         this.completed = eventInitDict.completed || new FileMap();
         this.data = eventInitDict.data || null;
+        this.fileError = eventInitDict.fileError || null;
     }
 }
 
-export { FileManagerEvent };
+class FileUploadEvent extends CustomEvent {
+    constructor(type, eventInitDict) {
+        super(type, eventInitDict);
+        this.bytesLoaded = eventInitDict.bytesLoaded || 0;
+        this.bytesTotal = eventInitDict.bytesTotal || 0;
+        this.file = eventInitDict.file || null;
+        this.filename = eventInitDict.filename || null;
+        this.data = eventInitDict.data || null;
+        this.header = eventInitDict.header || null;
+        this.duration = eventInitDict.duration || 0;
+    }
+}
+
+export { FileManagerEvent, FileUploadEvent };
