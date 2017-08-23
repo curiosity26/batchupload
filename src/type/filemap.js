@@ -4,7 +4,9 @@
  **/
 
 class FileMap extends Map {
-    set(value) {
+    public set(value) {
         super.set(value.uuid, value);
     }
 }
+
+export { FileMap };

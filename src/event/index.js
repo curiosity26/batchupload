@@ -5,6 +5,53 @@
 
 import FileMap from '../type/filemap';
 
+class Emitter {
+    private events = new Map();
+
+    on(type, listener) {
+        if (!this.events.has(type)) {
+            this.events.set(type, new Set());
+        }
+
+        this.events.get(type).add(listener);
+    };
+
+    off(type, listener) {
+        const events = this.events.get(type);
+        if (!!events) {
+            events.delete(listener);
+        }
+    };
+
+    clear(type) {
+        if (!type) {
+            this.events = new Map();
+        } else {
+            this.events.set(type, new Set());
+        }
+    };
+
+    private emit(cb, event) {
+        // Handle callbacks asynchronously
+        setTimeout(function() {
+            cb(event);
+        }, 0);
+
+    };
+
+    dispatch(event) {
+        if (!!event.type) {
+            const type = event.type;
+            if (this.events.has(type)) {
+                event.target = this;
+                this.events.get(type).forEach((cb) => {
+                    this.emit(cb.bind(event.target), event);
+                });
+            }
+        }
+    };
+}
+
 class FileManagerEvent extends CustomEvent {
     static get INVALID_SIZE() {
         return 1;
@@ -48,4 +95,4 @@ class FileUploadEvent extends CustomEvent {
     }
 }
 
-export { FileManagerEvent, FileUploadEvent };
+export { Emitter, FileManagerEvent, FileUploadEvent };

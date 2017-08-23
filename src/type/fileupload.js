@@ -4,8 +4,7 @@
  **/
 
 import uuid from "uuid";
-import { FileUploadEvent } from "../event";
-import { Emitter } from "./emitter"
+import { FileUploadEvent, Emitter } from "../event";
 
 class FileUpload extends Emitter{
     private _file;
