@@ -3,7 +3,8 @@
  * Date: 2017-08-03
  **/
 
-import FileMap from '../type/filemap';
+import {FileMap} from '../type/filemap';
+import {FileManagerQueue} from "../manager/index";
 
 class Emitter {
     private events = new Map();
@@ -67,13 +68,14 @@ class FileManagerEvent extends CustomEvent {
 
     constructor(type, eventInitDict) {
         super(type, eventInitDict);
+        this.target = eventInitDict.target || null;
         this.bytesLoaded = eventInitDict.bytesLoaded || 0;
         this.bytesTotal = eventInitDict.bytesTotal || 0;
         this.totalBytesLoaded = eventInitDict.totalBytesLoaded || 0;
         this.totalBytesTotal = eventInitDict.totalBytesTotal || 0;
         this.currentTarget = eventInitDict.currentTarget || null;
         this.file = eventInitDict.file || null;
-        this.queue = eventInitDict.queue || new FileMap();
+        this.queue = eventInitDict.queue || new FileManagerQueue();
         this.errors = eventInitDict.errors || new FileMap();
         this.fileList = eventInitDict.fileList || new FileMap();
         this.completed = eventInitDict.completed || new FileMap();
@@ -82,9 +84,21 @@ class FileManagerEvent extends CustomEvent {
     }
 }
 
+class FileQueueEvent extends CustomEvent {
+    constructor(type, eventInitDict) {
+        super(type, eventInitDict);
+        this.target = eventInitDict.target || null;
+        this.bytesLoaded = eventInitDict.bytesLoaded || 0;
+        this.bytesTotal = eventInitDict.bytesTotal || 0;
+        this.currentTarget = eventInitDict.currentTarget || null;
+        this.file = eventInitDict.file || null;
+    }
+}
+
 class FileUploadEvent extends CustomEvent {
     constructor(type, eventInitDict) {
         super(type, eventInitDict);
+        this.target = eventInitDict.target || null;
         this.bytesLoaded = eventInitDict.bytesLoaded || 0;
         this.bytesTotal = eventInitDict.bytesTotal || 0;
         this.file = eventInitDict.file || null;
@@ -95,4 +109,4 @@ class FileUploadEvent extends CustomEvent {
     }
 }
 
-export { Emitter, FileManagerEvent, FileUploadEvent };
+export { Emitter, FileManagerEvent, FileUploadEvent, FileQueueEvent };
